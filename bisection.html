@@ -280,11 +280,11 @@ catch(error){
 <b>Here is an explanation of iteration :</b><br>
 <ul>
 <li>In math, a curve can be extended as long as needed, and the function has a root when it crosses the x-axis. If, after extending the graph, it does not cross the x-axis, it means the function has no root.<br>
-<li>At the starting point (iteration index 0), we have the value a=0, with f(a)=f(0)= -1(negative sign), b=2, with f(b)=f(2)=8.186 (positive sign).<br>
+<li>At the starting point (iteration index 0), we have the value a=0, with f(a)=f(0)= -1(negative sign), b=2, with f(b)=f(2)=8.1859 (positive sign).<br>
 <li>It means the graph crosses x-axis with f(a) below the x-axis and f(b) above the x-axis.<br>
 <li>Then, we calculate c=(a+b)/2, so we got c=(0+2)/2=1.<br>
 <li>The bisection method requires that values of f(a) and f(b) must have opposite signs.<br>
-<li>Next to the iteration 1, let's see iteration 0, f(c)= -0.1586(negative sign). Because f(c) is negative, then we must choose the sign of f(a) or f(b) positive. In this case f(b) is positive.<br>
+<li>Next to the iteration 1, let's see iteration 0, f(c)= -0.1585(negative sign). Because f(c) is negative, then we must choose the sign of f(a) or f(b) positive. In this case f(b) is positive.<br>
 <li>So at iteration 1, value of b is remains unchanged, value of a = value of c (a=1, b=2).<br>
 <li>For the next iteration, we do the same way, until we fullfil the condition where (b-a) < delta.<br>
 <li>At the final iteration(iteration 50), the process completes, but in the algorithm we still calculate the value of c as root one last time. Finally we obtain root = c, accuracy = error and residual f(c).<br>
