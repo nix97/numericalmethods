@@ -1,13 +1,295 @@
 <!DOCTYPE html>
 <html>
-<HEAD>
-<title>Bisection</title>
-<HEAD>
+<head>
+    <title>Bisection</title>
+    <script src="math.js"></script>
+    <script src="plotly-latest.min.js"></script>
+	<script async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript">
+    MathJax.Hub.Config({
+    jax: ["input/TeX","output/HTML-CSS"],
+    displayAlign: "left"
+});
+
+ </script>
+
+<!--
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://unpkg.com/mathjs/lib/browser/math.js"></script> -->
+    <meta name="viewport" content="width=device-width, initial-scale=0.35">
+</head>
+
 <body style="background-color:khaki">
 
-    This is Bisection page !!!
+<h3>Bisection</h3>
+<br>
+Bisection is one of the method to solving Nonlinear equation problem or to Finding root.
+<br>
+<h4>Bisection Formula :</h4>
+<img src="image/ss2.jpg" width="500" height="480"> 
+
+\[c_i=\frac{a_i+b_i}{2}\]
+<i>for i=0,1,2,3,....,n
+    <br><br>
+
+where :<br>
+&emsp; - ci is center point(position of intersection).<br>
+&emsp; - ai is left point.<br>
+&emsp; - bi is right point.</i><br><br>
+<b>Bisecton Method:</b><br>
+To approximate a root of the equation f(x)=0 in the interval [a,b]. <br>
+Proceed with the method only if f(x) is continuous and f(a) and f(b) have opposite signs.<br><br>
+<b>Input :</b><br>
+-f(x) as the function. <br>
+-[a,b] as the interval. <br>
+-delta as the tolerance. <br><br>
+<b>Output :</b><br>
+-Root or c.<br>
+-Error or accuracy. <br>
+-Residual f(c). <br><br>
+<b>Algorithm :</b> <br><br>
+ya=feval(f,a); <br>
+yb=feval(f,b); <br>
+if (ya*yb) > 0 &nbsp;break,end <br>
+max1=1+round((log(b-a)-log(delta))/log(2)); <br>
+for i=1 to max1 <br>
+&emsp; c=(a+b)/2 <br>
+&emsp; yc=feval(f,c); <br>
+&emsp; if (yc=0) <br>
+&emsp;&emsp; a=c; <br>
+&emsp;&emsp; b=c; <br>
+&emsp; else if (yb*yc)>0 <br>
+&emsp;&emsp; b=c; <br>
+&emsp;&emsp; yb=yc; <br>
+&emsp; else <br>
+&emsp;&emsp; a=c; <br>
+&emsp;&emsp; ya=yc; <br>
+&emsp; end; <br>
+&emsp; if (b-a) < delta &nbsp; break,end<br>endfor<br>
+c=(a+b)/2; <br>
+err=abs(b-a); <br>
+yc=feval(f,c); <br><br>
+     
+<b>For demo, just click Run.</b><br><br>
+
+<b>input :</b>
+ 
+<p>Y = F(x)= <input type="text" id="func_bisection" size="30" value="x*sin(x)-1"></p>
+<p>a = <input type="text" id="a_input" size="5" value="0"></p>
+<p>b = <input type="text" id="b_input" size="5" value="2"></p>
+<p>delta = <input type="text" id="delta_input" size="5" value="1e-15"></p>
+<b>Graph :</b><br>
+<p>domain x from: x1 = <input type="text" id="x1_input" size="5" value="-10">&emsp;to 
+&emsp;x2 = <input type="text" id="x2_input" size="5" value="10"></p>
+
+<!-- <p>x=<input type="number" id="x2_input" placeholder="Enter var x number"></p>
+ -->
+
+<button onclick="CountFunction()" style="width:75px"><b>Run</b></button>
+<p id="ya"></p>
+<p id="yb"></p>
+<p id="c_value"></p>
+<p id="yc"></p>
+
+<p id="root"></p>
+<p id="accuracy"></p>
+<p id="residual"></p>
+
+<div id="graph" style="width:100%;max-width:700px"></div>
+<br>
+<b>Iteration :</b>
+
+<p id="title"></p>
+<p id="iteration"></p>
+<p id="x1_input"></p>
+<p id="x2_input"></p>
+
+
+<script>
+
+function CountFunction() {
+try{
+  let FuncField = document.getElementById("func_bisection");
+  // Get the value of the input field
+  let func_value = FuncField.value;
+ 
+  //get a value a
+  let aField = document.getElementById("a_input");
+  let a_value = aField.value;
+      
+   let func =func_value;
+   //func replace x with  a value
+   let res_a = func.replace(/x/g, "("+a_value+")"); //result after replace(y=x^2 become y=val_a^2)
+  
+  //get value b
+   let bField = document.getElementById("b_input");
+   let b_value = bField.value;
+   
+   //get value delta
+   let deltaField = document.getElementById("delta_input");
+   let delta_value = deltaField.value;
+   
+   //func with b value
+   let res_b = func.replace(/x/g, "("+b_value+")");     
+   
+   //Graph
+   let x1Field = document.getElementById("x1_input");
+   let x1_value = x1Field.value;
+   let x1=x1_value;
+    
+ 
+   let x2Field = document.getElementById("x2_input");
+   let x2_value = x2Field.value;
+   let x2=x2_value;
+   
+   //replace x with (x) e.g. x^2 become (x)^2 due graph problem 
+   let res_func = func.replace(/x/g,"(x)"); 
+    
+       
+   n=Math.abs(x2-x1);
+   smooth=100*n;
+   h=n/smooth;
+     
+   let x2Values = [];
+   let y2Values = [];
+
+    
+ for(i=0;i<=smooth;i++){
+    x1Values=parseFloat(x1)+parseFloat(h*i);
+    x2Values.push(x1Values);
+    res_x1Val = res_func.replace(/x/g,x1Values); 
+    y1Values=math.evaluate(res_x1Val);
+    y2Values.push(y1Values);
+ }
+   
+   //Iteration
+   //Parse to float
+   let a=parseFloat(a_value);
+   let b=parseFloat(b_value);
+   let delta=parseFloat(delta_value);
+   
+   let Ya=math.evaluate(res_a);
+   let Yb=math.evaluate(res_b);
+      
+   if ((Ya*Yb)>0){
+    alert("Try another interval [a,b] or have no root !!!");
+    //{break;};
+   } 
+
+    Max = 1 + ((Math.log(b - a) - Math.log(delta)) / Math.log(2)); //log in java/js is natural logarithm; log10 is log base 10
+    maks = Math.round(Max);
+           
+    k = 0;
+    space2="&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"                    
+            
+    result_str = ""; //display result as string
+    for(i=1;i<=maks;i++){
+      c = (a + b) / 2;
+      let res_a = func.replace(/x/g, "("+a+")"); 
+      let Ya=math.evaluate(res_a);
+      
+      let res_b = func.replace(/x/g, "("+b+")"); 
+      let Yb=math.evaluate(res_b);
+      
+      let res_c = func.replace(/x/g, "("+c+")"); 
+      let Yc=math.evaluate(res_c);
+      
+      result_str = result_str + k.toString()+space2+a.toExponential(18)+space2+ c.toExponential(18).toString()+space2+b.toExponential(18).toString()+space2+Ya.toExponential(18).toString()+space2+Yb.toExponential(18).toString()+
+      space2+Yc.toExponential(18).toString()+"<br>";
+      
+      k += 1;  //inc(i)
+      if (Yc == 0) {
+        a = c;
+        b = c;
+      }else if((Yb*Yc)>0) {
+        b = c;
+        Yb = Yc;
+      }else{
+        a = c;
+        ya = yc;
+      }
+    
+      if((b-a)<delta) {break;}
+    
+    }
+    
+    c=(a+b)/2;
+    err=Math.abs(b-a);
+    res_c = func.replace(/x/g, "("+c+")"); 
+    Yc=math.evaluate(res_c);
+                            
+    document.getElementById("root").innerHTML = "Root = "+c;
+    document.getElementById("accuracy").innerHTML = "Accuracy is ± "+err;
+    document.getElementById("residual").innerHTML = "Residual F(c) = "+Yc;
+    space="&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp";
+    space3="&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp";
+    
+     title ="i"+space3+"Left endpoint(ai)"+space3+"Position of Intersection(ci)"+space3+"Right endpoint(bi)"+space3+"Function value F(ai)"+space3+"Function value F(bi)"+space3
+         +"Function value F(ci)";
+     document.getElementById("title").innerHTML =title;
+     document.getElementById("iteration").innerHTML =result_str;
+     document.getElementById("title").style.fontSize = "small";
+     document.getElementById("iteration").style.fontSize = "x-small";
+     document.getElementById("root").style.fontWeight="bold";
+
+ //View Graph
+ // Display using Plotly
+ 
+  var series1 = {
+   x:[c],y:[0],
+    //x:[1,2],y:[0,4],
+   mode: 'markers',
+   name:'Root',
+   marker:{
+   color:'Red',
+   size: 6  
+   }
+  };    
+ 
+  var series2 = {
+  x:x2Values, y:y2Values,
+  mode: 'lines',
+   name:'Graph Y',    
+   line: {
+   color: 'rgb(55, 128, 191)',
+   width: 1.5
+  }
+ };
+
+var data = [series1, series2];
+
+var layout = {
+  xaxis:{title:'X'},
+  yaxis:{title:'Y'},
+  title: 'Y = '+func
+};
+
+Plotly.newPlot('graph', data, layout);
+}
+catch(error){
+    alert("Something wrong with the input !!!");
+}
+
+}
+    
+</script>
+
+<!--<div id="graph" style="width:600px;height:300px;"></div>
+
+	<div id="graph" style="width:600px;height:300px;"></div>
+	-->
+<b>Here is an explanation of iteration :</b><br>
+<ul>
+<li>In math, a curve can be extended as long as needed, and the function has a root when it crosses the x-axis. If, after extending the graph, it does not cross the x-axis, it means the function has no root.<br>
+<li>At the starting point (iteration index 0), we have the value a=0, with f(a)=f(0)= -1(negative sign), b=2, with f(b)=f(2)=8.186 (positive sign).<br>
+<li>It means the graph crosses x-axis with f(a) below the x-axis and f(b) above the x-axis.<br>
+<li>Then, we calculate c=(a+b)/2, so we got c=(0+2)/2=1.<br>
+<li>The bisection method requires that values of f(a) and f(b) must have opposite signs.<br>
+<li>Next to the iteration 1, let's see iteration 0, f(c)= -0.1586(negative sign). Because f(c) is negative, then we must choose the sign of f(a) or f(b) positive. In this case f(b) is positive.<br>
+<li>So at iteration 1, value of b is remains unchanged, value of a = value of c (a=1, b=2).<br>
+<li>For the next iteration, we do the same way, until we fullfil the condition where (b-a) < delta.<br>
+<li>At the final iteration(iteration 50), the process completes, but in the algorithm we still calculate the value of c as root one last time. Finally we obtain root = c, accuracy = error and residual f(c).<br>
+<li>That's all.
+</ul>
 
 </body>
-
 </html>
-
