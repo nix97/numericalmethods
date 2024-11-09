@@ -291,10 +291,9 @@ catch(error){
 	-->
 <b>Here is an explanation of iteration :</b><br>
 <ul>
-<li>In math, a curve can be extended as long as needed, and False position method requires the function
-	crosses the x-axis. If, after extending the graph, it does not cross the x-axis, it could be only touch x-axis. When only touch x-axis the function Y=f(x) got the root also, but can not
-	solved using False position, due to not met required.
-	If the graph not cross or touch x-axis, means the function has no root.<br>
+<li>In math, a curve can be extended as long as needed, and Bisection method requires the graph
+	crosses the x-axis (f(a) and f(b) must have opposite sign). If, after extending the graph, does not crossing the x-axis or touch x-axis means the graph or function have no root. If the graph only touch x-axis, means have root but can not
+	solve using Bisection method. If only touch x-axis can be solved using Secant or Newton-Raphson method.<br>
 <li>At the starting point (iteration index 0), we have the value a=0, with f(a)=f(0)= -1(negative sign), b=2, with f(b)=f(2)=0.81859 (positive sign).<br>
 <li>It means the graph crosses x-axis with f(a) below the x-axis and f(b) above the x-axis.<br>
 <li>Then, we calculate c=(a+b)/2, so we got c=(0+2)/2=1.<br>
